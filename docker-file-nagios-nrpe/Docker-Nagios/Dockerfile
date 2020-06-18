@@ -245,4 +245,9 @@ EXPOSE 80 5666
 
 VOLUME "${NAGIOS_HOME}/var" "${NAGIOS_HOME}/etc" "/var/log/apache2" "/opt/Custom-Nagios-Plugins" "/opt/nagiosgraph/var" "/opt/nagiosgraph/etc"
 
-CMD [ "/usr/local/bin/start_nagios" "service nagios-nrpe-server start" ]
+
+COPY start.sh /start.sh
+CMD sh /start.sh
+
+
+#// CMD [ "/usr/local/bin/start_nagios" "service nagios-nrpe-server start" ]
