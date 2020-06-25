@@ -1,0 +1,136 @@
+// docker pull de imagenes oficiales
+
+    docker pull imagen_oficial
+
+// para crear tu imagen custom
+    
+    docker build --tag imagen-custom:version
+    docker build -t image-custom:version .
+    docker history -H image-custom:version --no-trunc // para ver los pasos completos
+    docker ps --no-trunc // en caso de los contenedores
+
+// para hacer build a no-dockerfile
+
+    docker build -t imagen_custom -f mydockerfile .
+
+// para búsqueda específica si es que tienes muchas imagenes
+    
+    docker images | grep imagen-custom
+
+// ver estadísticas de tu contenedoor
+
+    docker stats nombre_contenedor
+
+// listar contenedores
+
+    docker ps
+    docker ps -l // muestra el ultimo contenedor creado
+    docker ps -a // ver contenedores activos e inactivos
+    docker ps -q // solo para ver id de contenedores
+
+
+// eliminar imagenes
+
+    docker rmi id_imagen
+    docker rmi nombre_imagen:etiqueta
+    docker rmi nombre_imagen:v1 nombre_imagen:v2
+
+// para ver el historial de la creación de la imagen
+    
+    docker history -H  imagen:version
+
+
+// docker logs para ver historial del contenedor es como tail -f
+
+    docker logs nombre_contenedor
+    docker logs -f nombre_contenedor
+
+// para ejecutar contenedores
+
+    docker run -d --name nombre_contenedor imagen:version
+    docker run -d --name nombre_contenedor -p 80:80 imagen:version
+    docker run -d -p 80:80 nombre_imagen // cuando no colocas nombres se generan solo por defecto
+    docker run -dti --name nombre_contenedor imagen // sistema operativo
+    docker run -dti -e "prueba1=1234" --name nombre_contenedor custom_image
+    docker run -d java // ejecución de aplicativos java
+    docker run --rm -ti ubuntu bash // se crea la imagen y acceso al contenedor temporal
+
+// renombrar contenedores
+
+    docker rename nombre_antiguo nombre_nuevo
+
+// detener contenedor
+
+    docker stop nombre_contenedor
+
+// iniciar contenedor
+
+    docker start nombre_contenedor
+
+// ingresar terminal del contenedor
+
+    docker exec -ti nombre_contenedor bash
+    docker exec -u root -ti nombre_contenedor bash
+
+// eliminar contenedor de raiz
+    
+    docker rm -fv nombre_contenedor
+    docker ps -q | xargs docker rm -f // elimina todos los contenedores en ejecucion
+    docker rm -fv $(docker ps -aq) // otra forma de eliminar contenedores
+
+// eliminar varios contenedores
+
+    docker rm -f n1 n2 n3 ...n
+
+// tratamiento de iamgen dangling
+
+    docker images -f dangling=true
+    docker images -f dangling=true -q
+    docker images -f dangling=true -q | xargs docker rmi // elimina todas las imagenes malas
+
+// comandos externos sistema operativo
+    du -shc * // total de archivos existentes en la carpeta
+    grep "model name" /proc/cpuinfo // cuantos cores existentes
+    grep "model name" /proc/cpuinfo | wc -l
+
+
+// openssl
+    
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout docker.key -out docker.crt
+
+// creacion de bases de datos genericos
+
+    docker run -d --name my-db1 -e "MYSQL_ROOT_PASSWORD=12345678" mysql:5.7
+    mysql -u root -h 172.17.0.2 -p 12345678 // ejemplo de conexion
+    docker run -d -p 3306:3306 --name my-db2 -e "MYSQL_ROOT_PASSWORD=12345678" mysql:5.7 
+    docker run -d -p 3333:3306 --name my-db2 -e "MYSQL_ROOT_PASSWORD=12345678" -e "MYSQL_DATABASE=docker-db" -e "MYSQL_USER=docker"
+        -e "MYSQL_PASSWORD=6789" mysql:5.7
+    mysql -u root -p6789 -h 127.0.0.1 --port 3333
+
+// creacion no-sql mongo db con docker
+
+    docker pull mongo
+    docker run -d --name my-mongo -p  27017:27017 mongo
+    docker run -d -m "500mb" --name mongo mongo // hay opciones para limitar memoria RAM mb,gb
+    docker run -d -m "1gb" --cpuset-cpus 0-1 --name mongo mongo // limitar uso de cpu
+// creacion sql postgres
+
+    docker pull postgres
+    docker run -d --name postgres -e "POSTGRES_PASSWORD=12345678" -e "POSTGRES_USER=docker" -e "POSTGRES_DB=docker-db" -p 5432:5432 postgres
+    docker exec -ti postgres bash
+    psql -d docker-db -U docker
+
+
+// imagenes oficiales nginx apache tomcat
+
+    docker run -d -p 8888:80  --name nginx nginx
+    docker run -d -p 9999:80 --name apache httpd
+    docker pull tomcat
+    docker run -d -p 7070:8080 --name my-tomcat tomcat:9.0.8-jre8-alpine
+
+// imagen jenkins
+
+    docker pull jenkins
+    docker run -d -p 7070:8080 --name jenkins jenkins
+    docker exec -ti jenkins bash
+    cat /var/jenkins_home/secrets/initialAdminPassword

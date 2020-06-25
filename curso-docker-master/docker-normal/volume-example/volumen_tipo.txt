@@ -1,0 +1,31 @@
+// comandos de ejemplo volumen de host
+
+    # Se trata de crear un volumen en tu maquina local ejemplo
+    # creación de un contenedor mysql apuntando a una ruta en especifico
+
+// cuando se aplica el -v ruta_carpeta_local:ruta_mapeada_contenedor
+    
+    docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=xxxx" -v /opt/mysql:/var/lib/mysql mysql:5.7
+
+
+// comandos de ejemplo volumen anonimo
+    # no utilizar ese tipo de volumen ya que se eliminaría la data que tienen guardado en el contenedor
+    # de igual forma si eliminamos el contenedor con el comando docker rm -d nombre-contenedor no elimina el volumen,
+    # pero tendría una extensión ilegible de leer
+
+    docker run -d --name db -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=xxxx" -v /var/lib/mysql mysql:5.7
+    docker inspect db | grep 3770fb2
+
+// comando de ejemplo volumen nombrado, se crea el volumen antes y luego se le asigna al contenedor
+    # en caso de ser eliminado el contenedor, el volumen no se eliminará porque es persistente
+
+    docker volume create mysql-data
+    docker run -d --name mysql -v my-vol:/var/lib/mysql -p 3306:3306 -e "MYSQL_ROOT_PASSWORD=xxxxxx" -e "MYSQL_DATABASE=docker-db" mysql:5.7
+    docker volume rm mysql-data
+
+// dangling volumes
+    # se pueden eliminar volumenes que no se ocupan y no están referenciados por ningún contenedor
+
+    docker volume ls
+    docker volume ls -f dangling=true
+    docker volume ls -f dangling=true -q | xargs docker volume rm

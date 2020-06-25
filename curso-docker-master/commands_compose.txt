@@ -1,0 +1,16 @@
+// iniciar docker compose
+    
+    docker-compose up -d
+    docker-compose -f custom-docker-compose.yml up -d
+
+// eliminar docker compose
+
+    docker-compose down
+
+// build docker-compose con dockerfile
+
+    docker-compose build
+
+// cambiar el nombre del prefijo en docker compose
+
+    docker-compose -p webtest -f docker-compose-custom.yml up -d

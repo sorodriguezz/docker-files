@@ -1,0 +1,8 @@
+# always,unless-stopped, on-failure
+version: '3'
+services: 
+    test:
+        container_name: test
+        image: restart-image
+        build: .
+        restart: always
