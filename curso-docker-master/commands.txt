@@ -3,7 +3,7 @@
     docker pull imagen_oficial
 
 // para crear tu imagen custom
-    
+
     docker build --tag imagen-custom:version
     docker build -t image-custom:version .
     docker history -H image-custom:version --no-trunc // para ver los pasos completos
@@ -14,7 +14,7 @@
     docker build -t imagen_custom -f mydockerfile .
 
 // para búsqueda específica si es que tienes muchas imagenes
-    
+
     docker images | grep imagen-custom
 
 // ver estadísticas de tu contenedoor
@@ -36,7 +36,7 @@
     docker rmi nombre_imagen:v1 nombre_imagen:v2
 
 // para ver el historial de la creación de la imagen
-    
+
     docker history -H  imagen:version
 
 
@@ -78,7 +78,7 @@
     docker exec -u root -ti nombre_contenedor bash
 
 // eliminar contenedor de raiz
-    
+
     docker rm -fv nombre_contenedor
     docker ps -q | xargs docker rm -f // elimina todos los contenedores en ejecucion
     docker rm -fv $(docker ps -aq) // otra forma de eliminar contenedores
@@ -109,7 +109,7 @@
 
 
 // openssl
-    
+
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout docker.key -out docker.crt
 
 // creacion de bases de datos genericos
@@ -173,7 +173,7 @@
     docker run -d --network docker-test-network --name cont1 -ti centos
 
 // agregar contenedores en la misma red
-    
+
     docker run -d --network docker-test-network --name cont1 -ti centos
     docker run -d --network docker-test-network --name cont2 -ti centos
 
